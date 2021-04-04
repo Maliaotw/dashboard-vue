@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  openresty:
+    build:
+      context: .
+      dockerfile: ./compose/openresty/Dockerfile
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+    ports:
+    - 80:80
+
+  web:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    env_file:
+      - ./backend/.dev.env
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend/files:/app/files
+      - ./backend/data/static:/app/data/static
+      - ./logs/web:/app/logs
+    command: /start
+
+  postgres:
+    image: postgres:12.3
+    env_file:
+      - ./backend/.dev.env
+
+  redis:
+    image: redis:5.0
+
+networks:
+  default:
+    external:
+      name: web

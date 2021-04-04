@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+python /app/web/manage.py makemigrations
+python /app/web/manage.py migrate
+python /app/web/manage.py collectstatic --noinput
+
+
+/usr/local/bin/gunicorn config.wsgi --timeout 300 --bind 0.0.0.0:5000 --chdir=/app/web

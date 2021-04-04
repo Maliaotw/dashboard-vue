@@ -1,0 +1,8 @@
+.idea
+.DS_Store
+*.env
+*.log
+docker-compose-dev.yml
+node_modules
+lina
+package-lock.json
