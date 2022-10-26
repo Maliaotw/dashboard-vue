@@ -5,8 +5,6 @@ import uuid
 # Create your models here.
 
 class Asset(models.Model):
-    """資產信息表"""
-
     id = models.UUIDField(verbose_name='資產編號', default=uuid.uuid4, primary_key=True)
     category = models.ForeignKey("Category", verbose_name='類型', on_delete=models.CASCADE)
     busline = models.ForeignKey('Busline', verbose_name='業務線', on_delete=models.CASCADE)
@@ -41,6 +39,3 @@ class Busline(models.Model):
 
     def __str__(self):
         return "%s" % (self.name)
-
-
-

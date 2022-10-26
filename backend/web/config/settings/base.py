@@ -5,12 +5,21 @@ import datetime
 from pathlib import Path
 
 import environ
-
+import sys, os
 env = environ.Env()
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent.parent
 
+
 APPS_DIR = ROOT_DIR / "web"
+sys.path.insert(0, os.path.join(APPS_DIR, 'apps'))
+
+env = environ.Env()
+env_file = os.path.join(ROOT_DIR, ".env")
+if os.path.isfile(env_file):
+    # Use a local secret file, if provided
+    env.read_env(env_file)
+
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -70,10 +79,10 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     # Your stuff: custom apps go here
-    "app.apps.MyAppConfig",
-    'authentication.apps.AuthenticationConfig',
-    "common.apps.CommonConfig",
-    "settings.apps.SettingsConfig"
+    "apps.app.apps.MyAppConfig",
+    'apps.authentication.apps.AuthenticationConfig',
+    "apps.common.apps.CommonConfig",
+    "apps.settings.apps.SettingsConfig"
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -256,3 +265,70 @@ EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=1)
 
 
 
+
+# ---- CELERY v4.4.6 -----
+
+REDIS_PASSWORD = env("REDIS_PASSWORD")
+REDIS_HOST = env("REDIS_HOST")
+REDIS_PORT = env("REDIS_PORT")
+REDIS_DB = env("REDIS_DB")
+
+
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
+
+
+# Redis
+CELERY_BROKER_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
+CELERY_RESULT_BACKEND = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/1'
+
+# RabbitMQ
+# RABBITMQ_HOST = env.str("RABBITMQ_HOST")
+# RABBITMQ_PORT = env.int("RABBITMQ_PORT")
+# RABBITMQ_USER = env.str("RABBITMQ_USER")
+# RABBITMQ_PASSWORD = env.str("RABBITMQ_PASSWORD")
+# RABBITMQ_VHOST = env.str("RABBITMQ_VHOST")
+# CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}/{RABBITMQ_VHOST}'
+# CELERY_RESULT_BACKEND = 'rpc://'
+
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
+CELERY_ACCEPT_CONTENT = ["json"]
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer
+CELERY_TASK_SERIALIZER = "json"
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_serializer
+CELERY_RESULT_SERIALIZER = "json"
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-time-limit
+# CELERY_TASK_TIME_LIMIT = 10 * 60
+# CELERYD_TIME_LIMIT = 10 * 60
+# CELERY_TIME_LIMIT = 10 * 60
+# CELERY_TASK_TIME_LIMIT = 10 * 60
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-soft-time-limit
+# CELERY_TASK_SOFT_TIME_LIMIT = 300
+# CELERYD_SOFT_TIME_LIMIT = 300
+# CELERY_SOFT_TIME_LIMIT = 300
+# CELERY_TASK_SOFT_TIME_LIMIT = 300
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-scheduler
+# CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# 防治死锁
+# CELERYD_FORCE_EXECV = True
+
+# celery 的启动工作数量设置
+# CELERY_WORKER_CONCURRENCY = 20
+
+# 任务预取功能，就是每个工作的进程／线程在获取任务的时候，会尽量多拿 n 个，以保证获取的通讯成本可以压缩。
+# CELERYD_PREFETCH_MULTIPLIER = 20
+
+# CELERY_ACKS_LATE=''
+
+# 每個worker執行了多少任務就會銷燬，防止記憶體洩露，預設是無限的
+# CELERYD_MAX_TASKS_PER_CHILD = 40
+
+# 是否存儲任務返回值（邏輯刪除）。如果您仍然想存儲錯誤，只是不成功返回值，則可以設置
+# CELERY_IGNORE_RESULT = True
+
+# 任务结果的时效时间，默认一天
+# CELERY_TASK_RESULT_EXPIRES = 0
+# CELERY_RESULT_EXPIRES = 0
+
+CELERY_LOG_DIR = os.path.join(ROOT_DIR, 'data', 'celery')

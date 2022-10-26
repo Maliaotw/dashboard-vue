@@ -11,7 +11,7 @@ TIME_ZONE = 'Asia/Shanghai'
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True
+DEBUG = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
@@ -26,12 +26,12 @@ ALLOWED_HOSTS = ["*"]
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("POSTGRES_DB"),
-        'HOST': os.environ.get("POSTGRES_HOST"),
-        'PORT': os.environ.get("POSTGRES_PORT"),
-        'USER': os.environ.get("POSTGRES_USER"),
-        'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get("DB_DATABASE"),
+        'HOST': os.environ.get("DB_HOST"),
+        'PORT': os.environ.get("DB_PORT"),
+        'USER': os.environ.get("DB_USER"),
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
     }
 }
 
@@ -64,7 +64,7 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 # ------------------------------------------------------------------------------
 
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-eager-propagates
-CELERY_TASK_EAGER_PROPAGATES = True
+# CELERY_TASK_EAGER_PROPAGATES = True
 
 # Your stuff...
 # ------------------------------------------------------------------------------

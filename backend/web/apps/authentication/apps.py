@@ -5,4 +5,7 @@ class AuthenticationConfig(AppConfig):
     name = 'authentication'
 
     def ready(self):
-        import authentication.signals_handlers
+        try:
+            import authentication.signals  # noqa F401
+        except ImportError:
+            pass

@@ -13,9 +13,9 @@ urlpatterns = [
                   path(settings.ADMIN_URL, admin.site.urls),
                   # # Your stuff: custom urls includes go here
                   path("", lambda x: HttpResponse("OK"), name="home"),
-                  path("api/", include('app.urls.api_urls', namespace="app")),
-                  path("api/", include('common.urls.api_urls', namespace="common")),
-                  path("api/", include('authentication.urls.api_urls', namespace="authentication")),
-                  path("api/settings/", include('settings.urls.api_urls', namespace="settings")),
+                  path("api/", include('app.urls', namespace="app")),
+                  path("api/", include('common.urls', namespace="common")),
+                  path("api/", include('authentication.urls', namespace="authentication")),
+                  path("api/settings/", include('settings.urls', namespace="settings")),
 
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

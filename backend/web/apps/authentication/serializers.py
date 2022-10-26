@@ -4,9 +4,6 @@ from . import models
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    '''
-    LoginSerializer
-    '''
 
     type = serializers.CharField(source='get_type_display', required=False)
     reason = serializers.CharField(source='get_reason_display', required=False)

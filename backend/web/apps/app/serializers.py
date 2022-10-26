@@ -21,7 +21,7 @@ class AssetListSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-
+    # asset = AssetListSerializer(mary=True)
     class Meta:
         model = models.Category
         fields = "__all__"
