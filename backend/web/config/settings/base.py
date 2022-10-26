@@ -73,7 +73,8 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'channels'
 
 ]
 
@@ -332,3 +333,6 @@ CELERY_RESULT_SERIALIZER = "json"
 # CELERY_RESULT_EXPIRES = 0
 
 CELERY_LOG_DIR = os.path.join(ROOT_DIR, 'data', 'celery')
+
+
+ASGI_APPLICATION = 'config.routing.application'
