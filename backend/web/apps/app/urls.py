@@ -4,12 +4,11 @@ from rest_framework.routers import DefaultRouter
 
 from .views import AssetViewSet
 from .ws import TaskLogWebsocket
-app_name = 'app'
 
+app_name = 'app'
 
 router = DefaultRouter()
 router.register(r'asset', AssetViewSet)  # Allow: GET, POST, HEAD, OPTIONS
-
 
 api_urls = [
     path('', include(router.urls)),

@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from django.utils.translation import ugettext_lazy as _, ugettext as __
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 from django.utils import timezone
